@@ -1,0 +1,31 @@
+image: maven:latest
+
+variables:
+  PROJECT: "Coursework"
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode -fae"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - $PROJECT/.m2/repository/
+    - $PROJECT/target/
+
+build:
+  stage: build
+  tags:
+    - production
+  script:
+    - cd $PROJECT; mvn $MAVEN_CLI_OPTS compile
+
+test:
+  stage: test
+  tags:
+    - production
+  script:
+    - cd $PROJECT; mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    reports:
+      junit:
+       - $PROJECT/target/surefire-reports/TEST-*.xml
+    expire_in: 52 weeks
+

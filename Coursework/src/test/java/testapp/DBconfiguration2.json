@@ -1,0 +1,7 @@
+{
+    "host" : "relational.fit.cvut.cz",
+    "dbName" : "sakila",
+    "port" : "3306",
+    "username" : "guest",
+    "password" : "relational"
+}

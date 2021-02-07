@@ -1,0 +1,7 @@
+{
+    "host" : "feps-teach01.eps.surrey.ac.uk",
+    "dbName" : "com1028-sakila",
+    "port" : "3306",
+    "username" : "com1028-sakila-user",
+    "password" : "C0m1028-read"
+}
