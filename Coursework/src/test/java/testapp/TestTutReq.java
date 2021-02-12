@@ -1,8 +1,11 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import app.Film;
 import app.TutReq;
 import junit.framework.TestCase;
 
@@ -49,9 +52,18 @@ public class TestTutReq extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() {
-    	r.unimplementedMessage();
-    	return null;
+    private ArrayList<Integer> getExpected() throws SQLException {
+    	ArrayList<Integer> boringButExpensiveFilmIDs = new ArrayList<Integer>();
+    	Integer filmID;
+    	
+    	ResultSet rs = r.getResultSet("select film_id from film where description"
+    			+ " like \'%Boring%\' and rental_rate = 4.99");
+    	while(rs.next()) {
+    		filmID = rs.getInt("film_id");
+    		boringButExpensiveFilmIDs.add(filmID);
+    	}
+    	
+    	return boringButExpensiveFilmIDs;
     }
 	
 	/* -------------------------------------------------------------
@@ -75,11 +87,15 @@ public class TestTutReq extends TestCase {
      * @throws SQLException 
      */
     
+
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
     	r.printOutput();
-    	String actual = r.getActual();
-    	String expected = getExpected();
-    	assertEquals(expected, actual);
+    	ArrayList<Integer> actualIDs = new ArrayList<Integer>();
+    	ArrayList<Integer> expectedIDs = getExpected();
+    	for(Film f:r.getActual()) {
+    		actualIDs.add(f.getFilmID());
+    	}
+    	assertEquals(expectedIDs, actualIDs);
     }
 }
