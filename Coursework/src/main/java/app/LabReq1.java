@@ -1,7 +1,11 @@
 package app;
 import java.io.FileNotFoundException;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 import db.BaseQuery;
 
@@ -23,9 +27,56 @@ public class LabReq1 extends BaseQuery{
 	 * ---------------------------------------------------------------------
 	 */
 	
-	public String getActual() {
-		unimplementedMessage();
-		return null;
+	public ArrayList<String> getActual() throws SQLException {
+		ArrayList<actor> actorlist = new ArrayList<actor>();
+		HashMap<String,Integer> lastname =new HashMap<String,Integer>();
+		
+		ArrayList<String> result = new ArrayList<String>();
+		
+		
+		actor a;
+
+		Integer actor_id;
+		String first_name;
+		String last_name;
+		Date last_update;
+		
+		
+		ResultSet rs = this.getResultSet("Select * from actor");
+		while(rs.next()) {
+			actor_id=rs.getInt("actor_id");
+			first_name=rs.getNString("first_name");
+			last_name=rs.getNString("last_name");
+			last_update=rs.getDate("last_update");
+			a = new actor(actor_id,first_name,last_name,last_update);
+			actorlist.add(a);
+		}
+		
+		for(actor i:actorlist) {
+			
+			if(!(lastname.containsKey(i.getLast_name()))) {
+				lastname.put(i.getLast_name(), 1);
+			}else {
+				int count = lastname.get(i.getLast_name());
+				lastname.replace(i.getLast_name(), count+1);
+			}
+			
+			
+			
+		}
+		
+		for(HashMap.Entry<String,Integer> i : lastname.entrySet()) {
+			
+			
+			if(i.getValue()>=3) {
+				result.add(i.getKey());
+			}
+			
+		}
+		
+		Collections.sort(result);
+		
+		return result;
 	}
 	
 	
@@ -47,7 +98,11 @@ public class LabReq1 extends BaseQuery{
 	 */
 	
 	public void printOutput() throws SQLException{
-		unimplementedMessage();
+		ArrayList<String> print = getActual();
+		
+		for(String d: print) {
+			System.out.println(d);
+		}
 	}
 
 }

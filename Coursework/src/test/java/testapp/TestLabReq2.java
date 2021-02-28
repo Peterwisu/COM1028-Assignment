@@ -1,9 +1,14 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import app.Film;
 import app.LabReq2;
+import app.actor;
 import junit.framework.TestCase;
 
 public class TestLabReq2 extends TestCase {
@@ -49,9 +54,33 @@ public class TestLabReq2 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() {
-    	r.unimplementedMessage();
-    	return null;
+    private String getExpected() throws SQLException {
+    	
+    	ArrayList<actor> actorlist = new ArrayList<actor>();
+    	actor a;
+    	
+
+		Integer actor_id;
+		String first_name;
+		String last_name;
+		Date last_update;
+    	ResultSet rs = r.getResultSet("select * from actor where actor_id in (select actor_id from film_actor where film_id in (select film_id from film where title = 'Karate Moon'))");
+    	while(rs.next()) {
+    		actor_id=rs.getInt("actor_id");
+			first_name=rs.getNString("first_name");
+			last_name=rs.getNString("last_name");
+			last_update=rs.getDate("last_update");
+			a = new actor(actor_id,first_name,last_name,last_update);
+			actorlist.add(a);
+    	}
+    	
+    	StringBuffer display = new StringBuffer();
+    	
+    	for(actor d: actorlist) {
+    		display.append(d.getActor_id()+" "+d.getFirst_name()+" "+d.getLast_name()+" "+d.getLast_update()+"\n");
+    	}
+    	
+    	return display.toString();
     }
 	
 	/* -------------------------------------------------------------
@@ -82,4 +111,6 @@ public class TestLabReq2 extends TestCase {
     	String expected = getExpected();
     	assertEquals(expected, actual);
     }
+    
+    
 }

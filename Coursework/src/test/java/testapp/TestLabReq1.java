@@ -1,7 +1,9 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import app.LabReq1;
 import junit.framework.TestCase;
@@ -48,10 +50,22 @@ public class TestLabReq1 extends TestCase {
 	 * write additional helper methods.
 	 * ---------------------------------------------------------------------
 	 */
-    
-    private String getExpected() {
-    	r.unimplementedMessage();
-    	return null;
+    //
+    private ArrayList<String> getExpected() throws SQLException {
+    	
+    	ArrayList<String> result = new ArrayList<String>();
+    	
+    	ResultSet rs = r.getResultSet("select last_name from actor Group by last_name HAVING COUNT(*) >= 3");
+    	while (rs.next()) {
+    		
+    		result.add(rs.getNString("last_name"));
+    	}
+    	
+    	
+    	
+    	
+    	
+    	return result;
     }
 	
 	/* -------------------------------------------------------------
@@ -78,8 +92,8 @@ public class TestLabReq1 extends TestCase {
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
     	r.printOutput();
-    	String actual = r.getActual();
-    	String expected = getExpected();
+    	ArrayList<String> actual = r.getActual();
+    	ArrayList<String> expected = getExpected();
     	assertEquals(expected, actual);
     }
 }
