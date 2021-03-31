@@ -67,7 +67,7 @@ public class LabReq2 extends BaseQuery{
 		
 	}
 	
-	public ArrayList<actor> getActual() throws SQLException {
+	public String getActual() throws SQLException {
 		ArrayList<actor> actorlist = new ArrayList<actor>();
 		ArrayList<film_actor> film_actorlist =new ArrayList<film_actor>();
 		ArrayList<actor> actorkarate = new ArrayList<actor>();
@@ -156,7 +156,7 @@ public class LabReq2 extends BaseQuery{
     		display.append(d.getActor_id()+" "+d.getFirst_name()+" "+d.getLast_name()+" "+d.getLast_update()+"\n");
     	}
     	
-    	return actorkarate;
+    	return display.toString();
 		
 	}
 	
@@ -186,7 +186,7 @@ public class LabReq2 extends BaseQuery{
 	 */
 	
 	public void printOutput() throws SQLException{
-		ArrayList<actor> karate = getActual();
+		String karate = getActual();
 		System.out.println(karate);
 	}
 	

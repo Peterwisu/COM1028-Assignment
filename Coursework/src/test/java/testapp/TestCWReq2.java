@@ -87,7 +87,7 @@ public class TestCWReq2 extends TestCase {
     	 }
     	 
     	  
-    	 return a;
+    	 return null;
     }
 	
 	/* -------------------------------------------------------------
