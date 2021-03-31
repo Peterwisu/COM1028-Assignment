@@ -1,9 +1,12 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import app.CWReq2;
+import app.customer;
 import junit.framework.TestCase;
 
 public class TestCWReq2 extends TestCase {
@@ -49,9 +52,42 @@ public class TestCWReq2 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() {
-    	r.unimplementedMessage();
-    	return null;
+    private customer getExpected() throws SQLException {
+    	
+    	customer a = null;
+    	
+    	int customer_id;
+	
+		String first_name;
+		String last_name;
+		
+		int address_id;
+    	
+    	 ResultSet rs2 = r.getResultSet("select  * from customer where customer_id =(SELECT customer.customer_id  FROM customer inner join\n"
+    	 		+ "\n"
+    	 		+ "(SELECT customer_id,COUNT(*) as numberOfrental\n"
+    	 		+ "FROM rental\n"
+    	 		+ "GROUP BY customer_id ) as x on customer.customer_id = x.customer_id where x.numberOfrental = (select max(x.numberOfrental)  FROM customer inner join\n"
+    	 		+ "\n"
+    	 		+ "(SELECT customer_id,COUNT(*) as numberOfrental\n"
+    	 		+ "FROM rental\n"
+    	 		+ "GROUP BY customer_id ) as x on customer.customer_id = x.customer_id));");
+    	 
+    	 while(rs2.next()) {
+    		 
+    		customer_id=rs2.getInt("customer_id");
+ 	
+ 			first_name=rs2.getString("first_name");
+ 			last_name=rs2.getNString("last_name");
+ 		
+ 			address_id=rs2.getInt("address_id");
+ 		
+ 			a = new  customer(customer_id,first_name,last_name,address_id);
+    		 
+    	 }
+    	 
+    	  
+    	 return a;
     }
 	
 	/* -------------------------------------------------------------
@@ -79,7 +115,7 @@ public class TestCWReq2 extends TestCase {
     {
     	r.printOutput();
     	String actual = r.getActual();
-    	String expected = getExpected();
+    	customer expected = getExpected();
     	assertEquals(expected, actual);
     }
 }

@@ -1,7 +1,9 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import app.CWReq1;
 import junit.framework.TestCase;
@@ -49,9 +51,25 @@ public class TestCWReq1 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() {
+    private int getExpected() throws SQLException {
     	r.unimplementedMessage();
-    	return null;
+    	
+    	ArrayList<String> result = new ArrayList<String>();
+    	
+    	int req1result = 0;
+    	
+    	
+    	ResultSet rs1 = r.getResultSet("select count(customer_id)  as count from customer;");
+    	while(rs1.next()) {
+    	req1result = rs1.getInt("count");
+    	
+    	}
+    	
+    	
+    	
+    	
+    	
+    	return req1result;
     }
 	
 	/* -------------------------------------------------------------
@@ -78,8 +96,8 @@ public class TestCWReq1 extends TestCase {
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
     	r.printOutput();
-    	String actual = r.getActual();
-    	String expected = getExpected();
+    	int actual = r.getActual();
+    	int expected = getExpected();
     	assertEquals(expected, actual);
     }
 }

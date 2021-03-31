@@ -1,9 +1,13 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import app.CWReq3;
+import app.actor;
+import app.customer;
 import junit.framework.TestCase;
 
 public class TestCWReq3 extends TestCase {
@@ -49,8 +53,36 @@ public class TestCWReq3 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() {
-    	r.unimplementedMessage();
+    private String getExpected() throws SQLException {
+    	
+    	ArrayList<customer> finalcustomerlist = new ArrayList<customer>();
+    	
+    	customer a;
+    	
+    	int customer_id;
+
+    	String first_name;
+    	String last_name;
+
+    	int address_id;
+    	
+    	ResultSet rs3= r.getResultSet("select customer.customer_id,customer.first_name,customer.last_name ,customer.address_id,x.total_revenue from customer inner join( select customer_id,sum(z.revenue) as total_revenue  from ( select x.inventory_id,x.film_id,x.rental_id,x.customer_id,z.title,z.revenue from (select inventory.inventory_id,film_id,rental.rental_id,rental.customer_id from inventory INNER JOIN rental on inventory.inventory_id = rental.inventory_id) as x inner join(select  film.film_id,film.title,rentalcount*rental_rate as revenue from film inner join (select film_id,count(*) as rentalcount from inventory INNER JOIN rental  on inventory.inventory_id = rental.inventory_id group by film_id   order by film_id ) as counted on film.film_id =counted.film_id ) as z on x.film_id = z.film_id)as z group by customer_id)as x on customer.customer_id = x.customer_id order by total_revenue desc limit 10;");
+    	
+    	while(rs3.next()) {
+    		
+    		customer_id=rs3.getInt("customer_id");
+    	 	
+ 			first_name=rs3.getString("first_name");
+ 			last_name=rs3.getNString("last_name");
+ 		
+ 			address_id=rs3.getInt("address_id");
+    		
+ 			
+ 			a = new  customer(customer_id,first_name,last_name,address_id);
+    		finalcustomerlist.add(a);
+    	}
+    	
+    	
     	return null;
     }
 	
@@ -77,6 +109,7 @@ public class TestCWReq3 extends TestCase {
     
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
+    	getExpected();
     	r.printOutput();
     	String actual = r.getActual();
     	String expected = getExpected();

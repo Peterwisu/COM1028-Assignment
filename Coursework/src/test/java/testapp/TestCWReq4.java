@@ -1,9 +1,13 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import app.CWReq4;
+import app.city;
+import app.customer;
 import junit.framework.TestCase;
 
 public class TestCWReq4 extends TestCase {
@@ -49,8 +53,34 @@ public class TestCWReq4 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() {
-    	r.unimplementedMessage();
+    private String getExpected() throws SQLException {
+    	
+    	int city_id;
+    	String city;
+
+    	city a;
+    	
+    	ArrayList<city> finalcitylist = new ArrayList<city>();
+    	
+    	ResultSet rs4 = r.getResultSet("select  city.city,city.city_id,x.total_revenue from city inner join ( select  x.city_id,sum(revenue) as total_revenue from ( select z.inventory_id,z.film_id,z.rental_id,z.customer_id,z.title,z.revenue,customer.address_id,address.city_id from ( select x.inventory_id,x.film_id,x.rental_id,x.customer_id,z.title,z.revenue from (\n"
+    			+ "select inventory.inventory_id,film_id,rental.rental_id,rental.customer_id\n"
+    			+ "from inventory INNER JOIN rental \n"
+    			+ " on inventory.inventory_id = rental.inventory_id) as x inner join(select  film.film_id,film.title,rentalcount*rental_rate as revenue from film inner join (select film_id,count(*) as rentalcount \n"
+    			+ "from inventory INNER JOIN rental \n"
+    			+ " on inventory.inventory_id = rental.inventory_id\n"
+    			+ " group by film_id   order by film_id ) as counted on film.film_id =counted.film_id ) as z on x.film_id = z.film_id)as z inner join customer on z.customer_id = customer.customer_id  inner join address on address.address_id = customer.address_id )as x group by city_id \n"
+    			+ " )as x on city.city_id =x.city_id order by total_revenue desc limit 10;");
+    	
+    	while(rs4.next()) {
+    		
+    		city_id= rs4.getInt("city_id");
+    		city=rs4.getString("city");
+    		
+    		a = new city(city_id,city);
+    		finalcitylist.add(a);
+    	}
+    	
+    	
     	return null;
     }
 	

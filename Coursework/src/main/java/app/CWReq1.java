@@ -1,7 +1,9 @@
 package app;
 import java.io.FileNotFoundException;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import db.BaseQuery;
 
@@ -23,9 +25,41 @@ public class CWReq1 extends BaseQuery{
 	 * ---------------------------------------------------------------------
 	 */
 	
-	public String getActual() {
-		unimplementedMessage();
-		return null;
+	public int getActual() throws SQLException {
+		
+
+		ArrayList<customer> customerlist = new ArrayList<customer>();
+		customer a;
+		
+		int customer_id;
+		int store_id;
+		String first_name;
+		String last_name;
+		String email;
+		int address_id;
+		int active;
+		Date last_update;
+		
+		
+		ResultSet rs1 = this.getResultSet("Select * from customer");
+		while(rs1.next()) {
+			
+			customer_id=rs1.getInt("customer_id");
+		
+			first_name=rs1.getString("first_name");
+			last_name=rs1.getNString("last_name");
+			
+			address_id=rs1.getInt("address_id");
+			
+			
+			
+			
+			a = new  customer(customer_id,first_name,last_name,address_id);
+			customerlist.add(a);
+		}
+		
+		
+		return customerlist.size();
 	}
 	
 	
@@ -47,7 +81,7 @@ public class CWReq1 extends BaseQuery{
 	 */
 	
 	public void printOutput() throws SQLException{
-		unimplementedMessage();
+		System.out.println(getActual());
 	}
 
 }

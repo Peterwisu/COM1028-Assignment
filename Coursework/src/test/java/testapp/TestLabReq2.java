@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import app.Film;
 import app.LabReq2;
@@ -54,7 +55,7 @@ public class TestLabReq2 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() throws SQLException {
+    private ArrayList<actor> getExpected() throws SQLException {
     	
     	ArrayList<actor> actorlist = new ArrayList<actor>();
     	actor a;
@@ -80,7 +81,7 @@ public class TestLabReq2 extends TestCase {
     		display.append(d.getActor_id()+" "+d.getFirst_name()+" "+d.getLast_name()+" "+d.getLast_update()+"\n");
     	}
     	
-    	return display.toString();
+    	return actorlist;
     }
 	
 	/* -------------------------------------------------------------
@@ -107,8 +108,8 @@ public class TestLabReq2 extends TestCase {
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
     	r.printOutput();
-    	String actual = r.getActual();
-    	String expected = getExpected();
+    	List<actor> actual = r.getActual();
+    	List<actor> expected = getExpected();
     	assertEquals(expected, actual);
     }
     
