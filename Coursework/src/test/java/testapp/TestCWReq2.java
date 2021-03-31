@@ -52,9 +52,9 @@ public class TestCWReq2 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private customer getExpected() throws SQLException {
+    private String getExpected() throws SQLException {
     	
-    	customer a = null;
+    	customer ans = null;
     	
     	int customer_id;
 	
@@ -82,12 +82,15 @@ public class TestCWReq2 extends TestCase {
  		
  			address_id=rs2.getInt("address_id");
  		
- 			a = new  customer(customer_id,first_name,last_name,address_id);
+ 			ans = new  customer(customer_id,first_name,last_name,address_id);
     		 
     	 }
     	 
-    	  
-    	 return null;
+    		
+ 		StringBuffer A = new StringBuffer();
+ 		A.append(ans.getCustomer_id()+" "+ans.getFirst_name()+" "+ans.getLast_name());
+ 		
+ 		return A.toString();
     }
 	
 	/* -------------------------------------------------------------
@@ -112,10 +115,13 @@ public class TestCWReq2 extends TestCase {
      */
     
     public void testAndOutput() throws FileNotFoundException, SQLException
+    
+    
     {
+    	
     	r.printOutput();
     	String actual = r.getActual();
-    	customer expected = getExpected();
+    	String expected = getExpected();
     	assertEquals(expected, actual);
     }
 }

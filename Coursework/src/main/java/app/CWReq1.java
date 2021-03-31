@@ -32,13 +32,12 @@ public class CWReq1 extends BaseQuery{
 		customer a;
 		
 		int customer_id;
-		int store_id;
+		
 		String first_name;
 		String last_name;
-		String email;
+		
 		int address_id;
-		int active;
-		Date last_update;
+		
 		
 		
 		ResultSet rs1 = this.getResultSet("Select * from customer");
