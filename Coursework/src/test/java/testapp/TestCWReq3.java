@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.CWReq3;
 import app.actor;
@@ -53,37 +55,51 @@ public class TestCWReq3 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() throws SQLException {
+    private ArrayList<String> getExpected() throws SQLException {
     	
     	ArrayList<customer> finalcustomerlist = new ArrayList<customer>();
-    	
+    	ArrayList<Double> revenuelist =new ArrayList<Double>();
     	customer a;
     	
     	int customer_id;
 
     	String first_name;
     	String last_name;
-
     	int address_id;
+    	Double revenue;
     	
-    	ResultSet rs3= r.getResultSet("select customer.customer_id,customer.first_name,customer.last_name ,customer.address_id,x.total_revenue from customer inner join( select customer_id,sum(z.revenue) as total_revenue  from ( select x.inventory_id,x.film_id,x.rental_id,x.customer_id,z.title,z.revenue from (select inventory.inventory_id,film_id,rental.rental_id,rental.customer_id from inventory INNER JOIN rental on inventory.inventory_id = rental.inventory_id) as x inner join(select  film.film_id,film.title,rentalcount*rental_rate as revenue from film inner join (select film_id,count(*) as rentalcount from inventory INNER JOIN rental  on inventory.inventory_id = rental.inventory_id group by film_id   order by film_id ) as counted on film.film_id =counted.film_id ) as z on x.film_id = z.film_id)as z group by customer_id)as x on customer.customer_id = x.customer_id order by total_revenue desc limit 10;");
-    	
+    	ResultSet rs3= r.getResultSet("select customer.customer_id,customer.first_name,customer.last_name,customer.address_id,rev.revenue from customer inner join(\n"
+    			+ "select customer_id,sum(rental_rate) as revenue from (select rental.rental_id,x.inventory_id,x.rental_rate,rental.customer_id from rental inner join (select rental_rate,inventory.inventory_id,film.film_id from film inner join inventory on film.film_id=inventory.film_id\n"
+    			+ ")as x on rental.inventory_id =x.inventory_id)as z group by customer_id order by revenue desc limit 10 )as rev on customer.customer_id= rev.customer_id;\n"
+    			+ "");
     	while(rs3.next()) {
     		
     		customer_id=rs3.getInt("customer_id");
     	 	
  			first_name=rs3.getString("first_name");
  			last_name=rs3.getNString("last_name");
- 		
  			address_id=rs3.getInt("address_id");
+ 			revenue=rs3.getDouble("revenue");
     		
  			
  			a = new  customer(customer_id,first_name,last_name,address_id);
     		finalcustomerlist.add(a);
+    		revenuelist.add(revenue);
     	}
     	
     	
-    	return null;
+    	
+    	
+    	ArrayList<String> answer = new ArrayList<String>();
+    	
+    	
+    	for(int i=0;i<finalcustomerlist.size();i++) {
+    		
+    		answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+revenuelist.get(i)+"\n");
+    	}
+    	
+    	
+    	return answer;
     }
 	
 	/* -------------------------------------------------------------
@@ -109,10 +125,10 @@ public class TestCWReq3 extends TestCase {
     
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
-    	getExpected();
+    	System.out.print(getExpected());
     	r.printOutput();
-    	String actual = r.getActual();
-    	String expected = getExpected();
+    	ArrayList<String> actual = r.getActual();
+    	ArrayList<String> expected = getExpected();
     	assertEquals(expected, actual);
     }
 }

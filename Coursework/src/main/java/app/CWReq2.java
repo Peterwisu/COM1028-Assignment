@@ -32,7 +32,7 @@ public class CWReq2 extends BaseQuery{
 		
 		
 		
-		customer ans;
+		customer a;
 		
 		
 		ArrayList<customer> allcustomer = new ArrayList<customer>();
@@ -49,7 +49,7 @@ public class CWReq2 extends BaseQuery{
 		
 		
 		
-		ans =getcustomerdetails(allcustomer, customer_id_WithHighestRent);
+		a =getcustomerdetails(allcustomer, customer_id_WithHighestRent);
 		
 		
 		
@@ -59,7 +59,7 @@ public class CWReq2 extends BaseQuery{
 		
 		
 		StringBuffer A = new StringBuffer();
-		A.append(ans.getCustomer_id()+" "+ans.getFirst_name()+" "+ans.getLast_name());
+		A.append(a.getCustomer_id()+" "+a.getFirst_name()+" "+a.getLast_name());
 		
 		return A.toString();
 	}
@@ -67,21 +67,24 @@ public class CWReq2 extends BaseQuery{
 	
 	
 	
-	
+	/**
+	 * Retrieve all Customer from the database and create the Customer objects
+	 * 
+	 * @return list of customer
+	 * @throws SQLException
+	 */
 	public ArrayList<customer> getcustomer() throws SQLException {
 		
 
 		ArrayList<customer> customerlist = new ArrayList<customer>();
-		customer a;
-		
-		int customer_id;
-	
+		customer a;	
+		int customer_id;	
 		String first_name;
-		String last_name;
-	
+		String last_name;	
 		int address_id;
 		
-		
+
+		//iterate over the ResultSet to create an ArrayList of Customer objects
 		ResultSet rs2customer = this.getResultSet("Select * from customer");
 		while(rs2customer.next()) {
 			
@@ -104,20 +107,26 @@ public class CWReq2 extends BaseQuery{
 	}
 	
 	
+	
+	
+	/**Retrieve all Rental from the database and create the Rental objects
+	 * 
+	 * 
+	 * @return list of all rental
+	 * @throws SQLException
+	 */
 	public ArrayList<rental> getrental() throws SQLException {
 		
 		
-		ArrayList<rental>  rentallist =new ArrayList<rental>();
-		
-		
+		ArrayList<rental>  rentallist =new ArrayList<rental>();	
 		rental a;
-		
 		int rental_id;
 		int inventory_id;
 		int customer_id;
 		
 		
-		
+
+		//iterate over the ResultSet to create an ArrayList of  Rental objects
 		ResultSet rs2rental =this.getResultSet("Select * from rental");
 		
 		while(rs2rental.next()) {
@@ -137,6 +146,13 @@ public class CWReq2 extends BaseQuery{
 	}
 	
 	
+	
+	
+	/**get a customer id which has a highest rental from list of rental
+	 * 
+	 * @param rentallist List of a rental
+	 * @return customer_id 
+	 */
 	public int gethighestrental(ArrayList<rental>  rentallist) {
 		
 		Map<Integer,Integer> rentalcount =new HashMap<Integer,Integer>();
@@ -179,7 +195,12 @@ public class CWReq2 extends BaseQuery{
 	
 	
 	
-	
+	/**get a details of a customer which have highest rental from customer list
+	 * 
+	 * @param allcustomer
+	 * @param customer_id
+	 * @return customer which have highest rental
+	 */
 	public customer getcustomerdetails(ArrayList<customer> allcustomer,int customer_id) {
 		
 		customer answer = null;

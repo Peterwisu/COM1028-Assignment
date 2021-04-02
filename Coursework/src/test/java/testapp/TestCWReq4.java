@@ -53,35 +53,40 @@ public class TestCWReq4 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() throws SQLException {
+    private ArrayList<String> getExpected() throws SQLException {
     	
     	int city_id;
     	String city;
-
     	city a;
-    	
+    	Double revenue;
     	ArrayList<city> finalcitylist = new ArrayList<city>();
+    	ArrayList<Double> revenuelist =new ArrayList<Double>();
     	
-    	ResultSet rs4 = r.getResultSet("select  city.city,city.city_id,x.total_revenue from city inner join ( select  x.city_id,sum(revenue) as total_revenue from ( select z.inventory_id,z.film_id,z.rental_id,z.customer_id,z.title,z.revenue,customer.address_id,address.city_id from ( select x.inventory_id,x.film_id,x.rental_id,x.customer_id,z.title,z.revenue from (\n"
-    			+ "select inventory.inventory_id,film_id,rental.rental_id,rental.customer_id\n"
-    			+ "from inventory INNER JOIN rental \n"
-    			+ " on inventory.inventory_id = rental.inventory_id) as x inner join(select  film.film_id,film.title,rentalcount*rental_rate as revenue from film inner join (select film_id,count(*) as rentalcount \n"
-    			+ "from inventory INNER JOIN rental \n"
-    			+ " on inventory.inventory_id = rental.inventory_id\n"
-    			+ " group by film_id   order by film_id ) as counted on film.film_id =counted.film_id ) as z on x.film_id = z.film_id)as z inner join customer on z.customer_id = customer.customer_id  inner join address on address.address_id = customer.address_id )as x group by city_id \n"
-    			+ " )as x on city.city_id =x.city_id order by total_revenue desc limit 10;");
+    	ResultSet rs4 = r.getResultSet("select city.city_id,city.city,sum(revenue) as revenue from city inner join address on city.city_id =address.city_id inner join \n"
+    			+ "(select customer.customer_id,customer.first_name,customer.last_name,customer.address_id,rev.revenue from customer inner join\n"
+    			+ "(select customer_id,sum(rental_rate) as revenue from (select rental.rental_id,x.inventory_id,x.rental_rate,rental.customer_id from rental inner join (select rental_rate,inventory.inventory_id,film.film_id from film inner join inventory on film.film_id=inventory.film_id\n"
+    			+ ")as x on rental.inventory_id =x.inventory_id)as z group by customer_id order by revenue  )as rev on customer.customer_id= rev.customer_id\n"
+    			+ ")as x on x.address_id = address.address_id group by city.city_id order by revenue desc limit 10;");
     	
     	while(rs4.next()) {
     		
     		city_id= rs4.getInt("city_id");
     		city=rs4.getString("city");
-    		
+    		revenue=rs4.getDouble("revenue");
     		a = new city(city_id,city);
     		finalcitylist.add(a);
+    		revenuelist.add(revenue);
+    	}
+
+    	ArrayList<String> answer = new ArrayList<String>();
+    	
+    	for(int i=0;i<finalcitylist.size();i++) {
+    		
+    		answer.add(finalcitylist.get(i).getCity_id()+" "+finalcitylist.get(i).getCity()+" "+revenuelist.get(i)+"\n");
+    		
     	}
     	
-    	
-    	return null;
+    	return answer;
     }
 	
 	/* -------------------------------------------------------------
@@ -108,8 +113,8 @@ public class TestCWReq4 extends TestCase {
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
     	r.printOutput();
-    	String actual = r.getActual();
-    	String expected = getExpected();
+    	ArrayList<String> actual = r.getActual();
+    	ArrayList<String> expected = getExpected();
     	assertEquals(expected, actual);
     }
 }

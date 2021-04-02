@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import db.BaseQuery;
 
@@ -67,7 +68,7 @@ public class LabReq2 extends BaseQuery{
 		
 	}
 	
-	public String getActual() throws SQLException {
+	public ArrayList<String> getActual() throws SQLException {
 		ArrayList<actor> actorlist = new ArrayList<actor>();
 		ArrayList<film_actor> film_actorlist =new ArrayList<film_actor>();
 		ArrayList<actor> actorkarate = new ArrayList<actor>();
@@ -150,13 +151,21 @@ public class LabReq2 extends BaseQuery{
 			
 		}
 		
-		StringBuffer display = new StringBuffer();
+		
+
+    	
+    	ArrayList<String> actorListForFilm = new ArrayList<String>();
     	
     	for(actor d: actorkarate) {
-    		display.append(d.getActor_id()+" "+d.getFirst_name()+" "+d.getLast_name()+" "+d.getLast_update()+"\n");
+    		actorListForFilm.add(d.getFirst_name() + " " + d.getLast_name());
     	}
+		
     	
-    	return display.toString();
+    	
+    	
+    	
+    	
+    	return actorListForFilm;
 		
 	}
 	
@@ -186,7 +195,7 @@ public class LabReq2 extends BaseQuery{
 	 */
 	
 	public void printOutput() throws SQLException{
-		String karate = getActual();
+		ArrayList<String> karate = getActual();
 		System.out.println(karate);
 	}
 	

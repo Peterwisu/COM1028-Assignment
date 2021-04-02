@@ -55,7 +55,7 @@ public class TestLabReq2 extends TestCase {
 	 * ---------------------------------------------------------------------
 	 */
     
-    private String getExpected() throws SQLException {
+    private ArrayList<String> getExpected() throws SQLException {
     	
     	ArrayList<actor> actorlist = new ArrayList<actor>();
     	actor a;
@@ -75,13 +75,18 @@ public class TestLabReq2 extends TestCase {
 			actorlist.add(a);
     	}
     	
-    	StringBuffer display = new StringBuffer();
+    
+    	
+    	
+    	ArrayList<String> actorListForFilm = new ArrayList<String>();
     	
     	for(actor d: actorlist) {
-    		display.append(d.getActor_id()+" "+d.getFirst_name()+" "+d.getLast_name()+" "+d.getLast_update()+"\n");
+    		actorListForFilm.add(d.getFirst_name() + " " + d.getLast_name());
     	}
+		
     	
-    	return display.toString();
+    
+    	return actorListForFilm;
     }
 	
 	/* -------------------------------------------------------------
@@ -108,8 +113,8 @@ public class TestLabReq2 extends TestCase {
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
     	r.printOutput();
-    	String actual = r.getActual();
-    	String expected = getExpected();
+    	ArrayList<String> actual = r.getActual();
+    	ArrayList<String> expected = getExpected();
     	assertEquals(expected, actual);
     }
     
