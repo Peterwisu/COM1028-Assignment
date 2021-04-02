@@ -3,7 +3,9 @@ package testapp;
 import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,13 +93,31 @@ public class TestCWReq3 extends TestCase {
     	
     	
     	ArrayList<String> answer = new ArrayList<String>();
+    	DecimalFormat df = new DecimalFormat("#.##");
     	
-    	
-    	for(int i=0;i<finalcustomerlist.size();i++) {
+    		for(int i=0;i<finalcustomerlist.size();i++) {
     		
-    		answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+revenuelist.get(i)+"\n");
+    		
+    		
+    		if(i!=finalcustomerlist.size()-1) {
+    			
+    			
+    			if((revenuelist.get(i).equals(revenuelist.get(i+1)))&&(finalcustomerlist.get(i).getCustomer_id()>finalcustomerlist.get(i+1).getCustomer_id())) {
+    				
+    				Collections.swap(finalcustomerlist, i, i+1);
+    				answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+df.format(revenuelist.get(i))+"\n");
+            		
+    			}else {
+    				answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+df.format(revenuelist.get(i))+"\n");
+            		
+    			}
+    		}
+    		else {
+    		answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+df.format(revenuelist.get(i))+"\n");
+    		}
     	}
-    	
+		
+		
     	
     	return answer;
     }

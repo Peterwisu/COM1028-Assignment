@@ -51,12 +51,25 @@ public class CWReq3 extends BaseQuery{
 		Map<customer, Double>  cus=getcustomer_with_revenue(CustomerIDRevenue,getcustomer());
 		DecimalFormat df = new DecimalFormat("#.##");
 
-		ArrayList<String> a= new ArrayList<String>();
+		
+		
+		ArrayList<customer> finalcustomerlist = new ArrayList<customer>();
+    	ArrayList<Double> revenuelist =new ArrayList<Double>();
+		
+		
 		int count=0;
+	
 		for(Entry<customer, Double> i: cus.entrySet()) {
 			if(count!=10) {
-			a.add(i.getKey().getCustomer_id()+" "+i.getKey().getFirst_name()+" "+i.getKey().getLast_name()+" "+df.format(i.getValue())+"\n");
+				
+				
+				finalcustomerlist.add(i.getKey());
+				revenuelist.add(i.getValue());
+				
+			
+			
 			count++;
+			
 			}else {
 				break;
 			}
@@ -66,11 +79,34 @@ public class CWReq3 extends BaseQuery{
 		
 		
 		
+
+    	ArrayList<String> answer = new ArrayList<String>();
+    	
+    	
+    	for(int i=0;i<finalcustomerlist.size();i++) {
+    		
+    		
+    		
+    		if(i!=finalcustomerlist.size()-1) {
+    			
+    			
+    			if((df.format(revenuelist.get(i)).equals(df.format(revenuelist.get(i+1))))&&(finalcustomerlist.get(i).getCustomer_id()>finalcustomerlist.get(i+1).getCustomer_id())) {
+    				Collections.swap(finalcustomerlist, i, i+1);
+    				answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+df.format(revenuelist.get(i))+"\n");
+        			
+    			}else {
+    			answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+df.format(revenuelist.get(i))+"\n");
+    			}
+    		}
+    		else {
+    		answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+df.format(revenuelist.get(i))+"\n");
+    		}
+    	}
 		
 		
 		
 		
-		return a;
+		return answer;
 	}
 	
 	
