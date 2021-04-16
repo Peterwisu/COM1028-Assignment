@@ -6,7 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import db.BaseQuery;
-
+/**
+ * 
+ * @author Wish Suharitdamrong
+ *
+ */
 public class CWReq1 extends BaseQuery{
 
 	public CWReq1(String configFilePath) throws FileNotFoundException {

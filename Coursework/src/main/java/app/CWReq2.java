@@ -9,7 +9,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import db.BaseQuery;
-
+/**
+ * 
+ * @author Wish Suharitdamrong
+ *
+ */
 public class CWReq2 extends BaseQuery{
 
 	public CWReq2(String configFilePath) throws FileNotFoundException {
@@ -31,24 +35,28 @@ public class CWReq2 extends BaseQuery{
 	public String getActual() throws SQLException {
 		
 		
-		
+		//Create Customer object
 		customer a;
 		
-		
+		//Create ArrayList of Customer
 		ArrayList<customer> allcustomer = new ArrayList<customer>();
-		
+		//Create ArrayList of Rental
 		ArrayList<rental>  allrental =new ArrayList<rental>();
 		
+		//Create integer variable for a customer_id which have highest Rental
 		int customer_id_WithHighestRent;
 		
+		//Call function getcustomer() and store in allcustomer
 		allcustomer = getcustomer();
+		//Call function getrental() and store in allrental
 		allrental = getrental();
 		
 		
+		//Call function gethighestrental(), use allrental as a input parameter of a function to get a customer_id which have highest rental and assign customer_id in customer_id_WithHighestRent
 		customer_id_WithHighestRent =gethighestrental(allrental);
 		
 		
-		
+		//Call function getcustomerdetails(),use a allcustomer and customer_id_WithHighestRent as a input parameter to get a  detail of customer_id in  customer_id_WithHighestRent and assign value in a
 		a =getcustomerdetails(allcustomer, customer_id_WithHighestRent);
 		
 		
@@ -57,9 +65,14 @@ public class CWReq2 extends BaseQuery{
 		
 		
 		
-		
+		//Create StringBuffer object
 		StringBuffer A = new StringBuffer();
+		
+		
+		//add a details of customer in StringBuffer A
 		A.append(a.getCustomer_id()+" "+a.getFirst_name()+" "+a.getLast_name());
+		
+		
 		
 		return A.toString();
 	}
@@ -75,7 +88,7 @@ public class CWReq2 extends BaseQuery{
 	 */
 	public ArrayList<customer> getcustomer() throws SQLException {
 		
-
+		
 		ArrayList<customer> customerlist = new ArrayList<customer>();
 		customer a;	
 		int customer_id;	
@@ -155,18 +168,26 @@ public class CWReq2 extends BaseQuery{
 	 */
 	public int gethighestrental(ArrayList<rental>  rentallist) {
 		
+		
+		//Create HashMap which have key as a Customer_id and value as count of customer's rental
 		Map<Integer,Integer> rentalcount =new HashMap<Integer,Integer>();
 		
-		
+		//run loop through a ArrayList rentallist 
 		for(rental i :rentallist) {
 			
+			//Check whether if HashMap rentalcount already contains customer_id in its key
 			if(rentalcount.containsKey(i.getCustomer_id())) {
-				int count = rentalcount.get(i.getCustomer_id());
 				
+				//temporary assign a value of a key which match a customer_id
+				int count = rentalcount.get(i.getCustomer_id());
+				//use put() function to insert a current customer_id and increase its value by 1 
 				rentalcount.put(i.getCustomer_id(), count+1);
 				
 				
 			}else {
+				//if HashMap rentalcount does not contain current customer_id 
+				
+				//use put() to add  customer_id as its key and value as 1
 				rentalcount.put(i.getCustomer_id(), 1);
 			}	
 		}
@@ -176,15 +197,18 @@ public class CWReq2 extends BaseQuery{
 		
 		int customer_id; //contain customer id which have a highest rental
 		
-		
+		//Run loop through HashMap rentalcount to find a customer_id which have highest value
 		for(Map.Entry<Integer, Integer> entryI : rentalcount.entrySet()) {
 			
+			//if Max is null or Value of entryI is greater than Max
 			if(Max==null||entryI.getValue()>Max.getValue()) {
+				//replace a value of max
 				Max=entryI;	
 			}
 			
 		}
 		
+		//use getKey() to get customer_id of Max and assign in customer_id
 		customer_id=Max.getKey();
 		
 		
@@ -204,10 +228,20 @@ public class CWReq2 extends BaseQuery{
 	public customer getcustomerdetails(ArrayList<customer> allcustomer,int customer_id) {
 		
 		customer answer = null;
-	
-		for(customer i: allcustomer) {		
+		
+		//run loop through arrayList of customer
+		for(customer i: allcustomer) {	
+			
+			
+			
+			//if customer_id at i is equal to customer_id which are input parameter 
 			if(customer_id==i.getCustomer_id()) {
+				
+				
+				
+				//value of i at current index is assign ijn answer
 				answer=i;
+				//exit loop
 				break;		
 			}			
 		}	
