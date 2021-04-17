@@ -45,7 +45,7 @@ public class CWReq3 extends BaseQuery{
 
 		Map<Integer, Double> PriceinEachrental=getrentalprice(getrental(),PriceinEachInventory);
 		
-		
+	
 		Map<Integer, Double> CustomerIDRevenue=getCustomerIDRevenue(getrental(), PriceinEachrental) ;
 		
 		
