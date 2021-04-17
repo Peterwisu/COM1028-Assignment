@@ -1,10 +1,8 @@
 package app;
 import java.io.FileNotFoundException;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import db.BaseQuery;
 /**
  * 
