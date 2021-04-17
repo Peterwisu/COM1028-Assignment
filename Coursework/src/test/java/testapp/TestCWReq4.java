@@ -1,13 +1,12 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import app.CWReq4;
 import app.city;
-import app.customer;
 import junit.framework.TestCase;
 
 public class TestCWReq4 extends TestCase {

@@ -1,10 +1,8 @@
 package testapp;
 
 import java.io.FileNotFoundException;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import app.CWReq2;
 import app.customer;
 import junit.framework.TestCase;

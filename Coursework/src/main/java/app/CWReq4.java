@@ -14,7 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 import db.BaseQuery;
-
+/**
+ * 
+ * @author Wish Suharitdamrong
+ *
+ */
 public class CWReq4 extends BaseQuery{
 
 	public CWReq4(String configFilePath) throws FileNotFoundException {
@@ -52,7 +56,7 @@ public class CWReq4 extends BaseQuery{
 		Map<city, Double>  CityWithRevenue =getcitywithRevenue(cityID_Revenue,getcity()); 
 				
 		
-		ArrayList<String> actual = new ArrayList();
+		ArrayList<String> actual = new ArrayList<String>();
 		DecimalFormat df = new DecimalFormat("#.##");
 		int count =0;
 		for(Map.Entry<city, Double> i :CityWithRevenue.entrySet()) {
@@ -489,7 +493,11 @@ public class CWReq4 extends BaseQuery{
 	
 	
 	
-
+	/**This function is used to sort HashMap by value in descending order
+	 * 
+	 * @param city_Revenue
+	 * @return Sorted HashMap
+	 */
 	public HashMap<city, Double> sortHashMapbyValue(HashMap<city, Double> city_Revenue) {
 		
 		HashMap sortedHashMap = new LinkedHashMap();
@@ -515,16 +523,7 @@ public class CWReq4 extends BaseQuery{
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 	/* -------------------------------------------------------------

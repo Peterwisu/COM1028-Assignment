@@ -13,9 +13,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import db.BaseQuery;
-
+/**
+ * 
+ * @author Wish Suharitdamrong
+ *
+ */
 public class CWReq3 extends BaseQuery{
 
 	public CWReq3(String configFilePath) throws FileNotFoundException {
@@ -193,7 +196,11 @@ public class CWReq3 extends BaseQuery{
 	
 	
 	
-	
+	/**Retrieve all Film from the database and create the Film objects
+	 * 
+	 * @return list of all film
+	 * @throws SQLException
+	 */
 	public ArrayList<Film> getfilm() throws SQLException {
 		ArrayList<Film> films = new ArrayList<Film>();
 		
@@ -221,7 +228,12 @@ public class CWReq3 extends BaseQuery{
 	}
 	
 	
-	
+	/**Retrieve all Inventory from the database and create the Inventory objects
+	 * 
+	 * @return list of all Inventory
+	 * 
+	 * @throws SQLException
+	 */
 	public ArrayList<inventory> getinventory() throws SQLException {
 		ArrayList<inventory> inventorylist = new ArrayList<inventory>();
 		
@@ -230,7 +242,7 @@ public class CWReq3 extends BaseQuery{
 		int film_id;
 		
 		
-		
+		//iterate over the ResultSet to create an ArrayList of Inventory objects
 		ResultSet rs3inventory= this.getResultSet("select * from inventory;");
 		
 		while(rs3inventory.next()) {
@@ -248,57 +260,64 @@ public class CWReq3 extends BaseQuery{
 	}
 	
 	
+	
+	/**This Function is use to match a rental rate of each Inventory in a HashMap
+	 * 
+	 * @param filmlist
+	 * @param inventorylist
+	 * @return HashMap<Integer, Double> of Inventory_id and Rental Rate
+	 */
 	public Map<Integer, Double> getInventory_cost( ArrayList<Film> filmlist,ArrayList<inventory> inventorylist) {
 		
 		
-		
+		//Create a HashMap of <Interger,Double> for Inventory_id and  Rental Rate respectively
 		Map<Integer,Double>  Inventory_cost =new HashMap<Integer,Double>();
 		
 		
 		
-			
+			//Iterate loop on ArrayList filmlist in outer loop as j
 			for(Film j:filmlist) {
-				
+				//Iterate loop on ArrayList inventorylist in inner loop as i
 				for(inventory i:inventorylist) {
 				
-				
+				//Check if film_id from i and j is equal
 				if(j.getFilmID().equals(i.getFilm_id())) {
+					
+					//put Inventory_id from i as key and  Rental Rate from j as value  in an HashMap
 					Inventory_cost.put(i.getInventory_id(),j.getRentalRate() );
 					
 				}
-				
-				
+							
 			}
 			
-			
 		}
-		
-		
-		
-		
-		
 		
 		return Inventory_cost;
 		
 	}
 	
 	
-	
+	/**This function is use to match a Rental_id with its Rental rate
+	 * 
+	 * @param rentallist
+	 * @param Inventory_cost
+	 * @return HashMap<Integer, Double> of Rental_id and Rental Rate
+	 */
 	public Map<Integer, Double> getrentalprice(ArrayList<rental> rentallist,Map<Integer,Double> Inventory_cost) {
 		
+		//Create a HashMap of <Integer,Double> for Rental_id and Rental Rate respectively
 		Map<Integer,Double>  Rental_price =new HashMap<Integer,Double>();
 		
 		
-		
+		//iterate over a rentallist as i in outer loop
 		for(rental i :rentallist) {
-			
-			
-			
+			//iterate over HashMap Inventory_cost using entrySet() as j in inner loop
 			for(Map.Entry<Integer, Double> j :Inventory_cost.entrySet()) {
 				
-				
+				//Check if Inventory_id of i is equal to key of HashMap in j which contains contains Inventory_if
 				if(i.getInventory_id()==j.getKey()) {
 					
+					//Put a Rental_id of i in key and value of j which are rental rate in value of a HashMap respectively
 					Rental_price.put(i.getRental_id(), j.getValue());
 				}
 				
@@ -309,44 +328,48 @@ public class CWReq3 extends BaseQuery{
 		
 	}
 	
-	
+	/**This function is used to find a total revenue of each customer_id and store it in HashMap
+	 * 
+	 * @param rentallist
+	 * @param PriceinEachrental
+	 * @return HashMap<Integer, Double> of customer_id and Revenue
+	 */
 	public Map<Integer, Double> getCustomerIDRevenue(ArrayList<rental> rentallist,Map<Integer, Double> PriceinEachrental) {
 		
-		
+		//Create HashMap of <Integer,Double> for Customer_id and  Revenue respectively
 		Map<Integer,Double> Customer_ID_Revenue = new HashMap<Integer,Double>();
 		
-		
+		//iterate over rentallist as i in outer loop
 		for(rental i: rentallist) {
-			
-			
+			 
+			//iterate over HashMap PriceinEachrental using entrySet() as j in inner loop
 			for(Map.Entry<Integer, Double> j :PriceinEachrental.entrySet()) {
 				
+				//Check if  Rental_id from i is equal to key from HashMap j which contain Rental_id
 				if(i.getRental_id()==j.getKey()) {
 					
+					
+					//Check whether  HashMap Customer_ID_Revenue already contains current customer_id from i in an HashMap
 					if(Customer_ID_Revenue.containsKey(i.getCustomer_id())) {
 						
-						
+						//temporary store revenue in a value of HashMap Customer_ID_Revenue which have key equal to current Customer_id at i in count
 						double count =Customer_ID_Revenue.get(i.getCustomer_id());
+						//using put() to increase a value  of revenue in an HashMap Customer_ID_Revenue by adding count which temporary store previous value and new value 
 						Customer_ID_Revenue.put(i.getCustomer_id(), count+j.getValue());
 						
 						
 					}else {
-						
+						//use put() to add Customer_id and its Rental rate or revenue
 						Customer_ID_Revenue.put(i.getCustomer_id(), j.getValue());
 						
 					}
 					
-					
 				}
-				
-				
+							
 			}
-			
-			
+					
 		}
-			
-		
-		
+				
 		return Customer_ID_Revenue;
 		
 	}
@@ -354,31 +377,36 @@ public class CWReq3 extends BaseQuery{
 	
 	
 	
-	
+	/**This function is used to match an object of Customer and its total revenue and store it in HashMap
+	 * 
+	 * @param CustomerIDRevenue
+	 * @param customerlist
+	 * @return HashMap<Integer, Double> of customer and Revenue
+	 */
 	public Map<customer, Double>   getcustomer_with_revenue(Map<Integer, Double> CustomerIDRevenue,ArrayList<customer> customerlist) {
 		
+		//Create HashMap of <Customer,Double> for Customer and Revenue respectively
 		Map<customer, Double> customer_revenue = new HashMap<customer, Double> ();
 		
-		
-
-		int count=0;
+		//iterate over customerlist as i in outer loop
 		for(customer i :customerlist) {
 			
+			//iterate over CustomerIDRevenue using entrySet() as j in inner loop
 			for(Map.Entry<Integer, Double> j :CustomerIDRevenue.entrySet()) {
 				
+				
+				//Check if customer_id of i is equal to customer_id at Key of HashMap j
 				if(i.getCustomer_id()==j.getKey()) {
-					
+					//put customer object and its revenue respectively in a HashMap
 					customer_revenue.put(i,j.getValue());
 					
 				}
-				
-				
+
 			}
-			
-			
-			
-			
+
 		}
+		
+		//use sortHashMapbyValue() to sort HashMap by its value in descending order
 		Map<customer, Double> SortHashMap =sortHashMapbyValue(customer_revenue );
 		
 		
@@ -389,7 +417,11 @@ public class CWReq3 extends BaseQuery{
 		
 	}
 	
-	
+	/**This function is used to sort HashMap by value in descending order
+	 * 
+	 * @param customer_revenue
+	 * @return Sorted HashMap
+	 */
 	public Map<customer, Double> sortHashMapbyValue(Map<customer, Double> customer_revenue) {
 		
 		HashMap sortedHashMap = new LinkedHashMap();

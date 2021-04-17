@@ -40,7 +40,7 @@ public class CWReq1 extends BaseQuery{
 		String last_name;
 		int address_id;
 		
-		
+		//iterate over the ResultSet to create an ArrayList of Customer objects
 		//Use ResultSet to retriving data from a database
 		ResultSet rs1 = this.getResultSet("Select * from customer");
 				
