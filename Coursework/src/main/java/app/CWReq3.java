@@ -40,29 +40,31 @@ public class CWReq3 extends BaseQuery{
 	public ArrayList<String> getActual() throws SQLException {
 		
 		
-		
+		//Call Function getInventory_cost() to retrieve a HashMap of inventory_id and its rental rate 
 		Map<Integer, Double> PriceinEachInventory= getInventory_cost(getfilm(),getinventory());
 
+		//Call Function getrentalprice() to retrieve a rental_id with its rental rate
 		Map<Integer, Double> PriceinEachrental=getrentalprice(getrental(),PriceinEachInventory);
 		
-	
+		//Call Function getCustomerIDRevenue() to get customer_ID and a total revenue of each customer_id
 		Map<Integer, Double> CustomerIDRevenue=getCustomerIDRevenue(getrental(), PriceinEachrental) ;
 		
+		//Call Function getcustomer_with_revenue() to get a customer object with its total revenue
+		Map<customer, Double>  customerRevenue=getcustomer_with_revenue(CustomerIDRevenue,getcustomer());
 		
 		
-		
-		Map<customer, Double>  cus=getcustomer_with_revenue(CustomerIDRevenue,getcustomer());
 		DecimalFormat df = new DecimalFormat("#.##");
 
-		
-		
+		//Create ArrayList for customer object and total revenue
 		ArrayList<customer> finalcustomerlist = new ArrayList<customer>();
     	ArrayList<Double> revenuelist =new ArrayList<Double>();
 		
-		
+		//initialise value of count by 0
 		int count=0;
 	
-		for(Entry<customer, Double> i: cus.entrySet()) {
+		//Iterate 10 times over HashMap  customerRevenue and assign its key and value in an Array 
+		for(Entry<customer, Double> i:  customerRevenue.entrySet()) {
+			//check whether count is equal to 10 
 			if(count!=10) {
 				
 				
@@ -70,10 +72,11 @@ public class CWReq3 extends BaseQuery{
 				revenuelist.add(i.getValue());
 				
 			
-			
+			//increase value of count by 1
 			count++;
 			
 			}else {
+				//if count is equal to 10 exit the loop
 				break;
 			}
 			
@@ -82,18 +85,20 @@ public class CWReq3 extends BaseQuery{
 		
 		
 		
-
+		//Create ArrayList for an customer detail and its total revenue
     	ArrayList<String> answer = new ArrayList<String>();
     	
-    	
+    	//iterate over finalcustomerlist
     	for(int i=0;i<finalcustomerlist.size();i++) {
     		
     		
-    		
+    		//Check whether i index is not a second last index
     		if(i!=finalcustomerlist.size()-1) {
     			
-    			
+    			//Check if value of revenuelist at index i is equal to value of next index and customer_id of  finalcustomerlist at index i is greater than customer_id in the next index ,This is for sorting a Customer_id when there two or more customer have same total revenue
     			if((df.format(revenuelist.get(i)).equals(df.format(revenuelist.get(i+1))))&&(finalcustomerlist.get(i).getCustomer_id()>finalcustomerlist.get(i+1).getCustomer_id())) {
+    				
+    				//Use  Collections.swap() to swap current index and next index
     				Collections.swap(finalcustomerlist, i, i+1);
     				answer.add(finalcustomerlist.get(i).getCustomer_id()+" "+finalcustomerlist.get(i).getFirst_name()+" "+finalcustomerlist.get(i).getLast_name()+" "+df.format(revenuelist.get(i))+"\n");
         			
@@ -381,7 +386,7 @@ public class CWReq3 extends BaseQuery{
 	 * 
 	 * @param CustomerIDRevenue
 	 * @param customerlist
-	 * @return HashMap<Integer, Double> of customer and Revenue
+	 * @return HashMap<Customer, Double> of customer and Revenue
 	 */
 	public Map<customer, Double>   getcustomer_with_revenue(Map<Integer, Double> CustomerIDRevenue,ArrayList<customer> customerlist) {
 		
@@ -398,6 +403,7 @@ public class CWReq3 extends BaseQuery{
 				//Check if customer_id of i is equal to customer_id at Key of HashMap j
 				if(i.getCustomer_id()==j.getKey()) {
 					//put customer object and its revenue respectively in a HashMap
+					
 					customer_revenue.put(i,j.getValue());
 					
 				}

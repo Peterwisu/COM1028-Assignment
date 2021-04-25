@@ -1,16 +1,13 @@
 package testapp;
 
 import java.io.FileNotFoundException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import app.CWReq3;
-import app.actor;
 import app.customer;
 import junit.framework.TestCase;
 
@@ -145,7 +142,7 @@ public class TestCWReq3 extends TestCase {
     
     public void testAndOutput() throws FileNotFoundException, SQLException
     {
-    	System.out.print(getExpected());
+    	
     	r.printOutput();
     	ArrayList<String> actual = r.getActual();
     	ArrayList<String> expected = getExpected();

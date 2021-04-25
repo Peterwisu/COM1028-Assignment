@@ -1,7 +1,11 @@
 package app;
 
 import java.sql.Date;
-
+/**
+ * 
+ * @author Wish Suharitdamrong
+ *
+ */
 public class actor {
 
 	Integer actor_id;

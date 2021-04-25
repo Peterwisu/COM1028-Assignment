@@ -41,13 +41,13 @@ public class CWReq1 extends BaseQuery{
 		int address_id;
 		
 		//iterate over the ResultSet to create an ArrayList of Customer objects
-		//Use ResultSet to retriving data from a database
+		//Use ResultSet to retrieving data from a database
 		ResultSet rs1 = this.getResultSet("Select * from customer");
 				
 		//store a data into ArrayList
 		while(rs1.next()) {
 			
-			//retrive a data from a column name
+			//retrieve a data from a column name
 			customer_id=rs1.getInt("customer_id");
 			first_name=rs1.getString("first_name");
 			last_name=rs1.getNString("last_name");

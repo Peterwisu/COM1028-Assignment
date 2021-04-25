@@ -1,5 +1,9 @@
 package app;
-
+/**
+ * 
+ * @author Wish Suharitdamrong
+ *
+ */
 public class city {
 	
 	private int city_id;

@@ -1,7 +1,9 @@
 package app;
-
-import java.sql.Date;
-
+/**
+ * 
+ * @author Wish Suharitdamrong
+ *
+ */
 public class customer {
 	
 	
