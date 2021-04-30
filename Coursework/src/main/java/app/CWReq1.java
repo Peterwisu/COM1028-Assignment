@@ -31,39 +31,55 @@ public class CWReq1 extends BaseQuery{
 		
 		//Create an ArrayList of customer objects
 		ArrayList<customer> customerlist = new ArrayList<customer>();
-		//Create customer object
-		customer a;
+		//Call function getcustomer() and store in allcustomer
+		customerlist =getcustomer();
 		
-		//Create fields of object customers
-		int customer_id;
+		//Return a size of a ArrayList using size() function which indicating a total number of customer
+		return customerlist.size();
+	}
+	
+	
+	
+	
+	/**
+	 * Retrieve all Customer from the database and create the Customer objects
+	 * 
+	 * @return list of customer
+	 * @throws SQLException
+	 */
+	public ArrayList<customer> getcustomer() throws SQLException {
+		
+		
+		ArrayList<customer> customerlist = new ArrayList<customer>();
+		customer a;	
+		int customer_id;	
 		String first_name;
-		String last_name;
+		String last_name;	
 		int address_id;
 		
+
 		//iterate over the ResultSet to create an ArrayList of Customer objects
-		//Use ResultSet to retrieving data from a database
-		ResultSet rs1 = this.getResultSet("Select * from customer");
-				
+		ResultSet rs1customer = this.getResultSet("Select * from customer");
 		//store a data into ArrayList
-		while(rs1.next()) {
-			
+		while(rs1customer.next()) {
 			//retrieve a data from a column name
-			customer_id=rs1.getInt("customer_id");
-			first_name=rs1.getString("first_name");
-			last_name=rs1.getNString("last_name");
-			address_id=rs1.getInt("address_id");
+			customer_id=rs1customer.getInt("customer_id");
+			first_name=rs1customer.getString("first_name");
+			last_name=rs1customer.getNString("last_name");
+			address_id=rs1customer.getInt("address_id");
 			
-			
-			
+
 			//create a new customer object insert a data into a customer 
 			a = new  customer(customer_id,first_name,last_name,address_id);
 			//add customer into an ArrayList
 			customerlist.add(a);
 		}
 		
-		//Return a size of a ArrayList using size() function which indicating a total number of customer
-		return customerlist.size();
+		return customerlist;
+		
 	}
+	
+	
 	
 	
 	/* -------------------------------------------------------------
