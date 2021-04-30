@@ -37,10 +37,7 @@ public class CWReq1 extends BaseQuery{
 		//Return a size of a ArrayList using size() function which indicating a total number of customer
 		return customerlist.size();
 	}
-	
-	
-	
-	
+
 	/**
 	 * Retrieve all Customer from the database and create the Customer objects
 	 * 
