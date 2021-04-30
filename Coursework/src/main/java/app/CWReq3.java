@@ -427,6 +427,10 @@ public class CWReq3 extends BaseQuery{
 	 * 
 	 * @param customer_revenue
 	 * @return Sorted HashMap
+	 * 
+	 * 
+	 * References :https://beginnersbook.com/2013/12/how-to-sort-hashmap-in-java-by-keys-and-values/
+	 * Last Access[30/04/2021]
 	 */
 	public Map<customer, Double> sortHashMapbyValue(Map<customer, Double> customer_revenue) {
 		
