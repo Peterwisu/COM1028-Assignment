@@ -477,7 +477,8 @@ public class CWReq3 extends BaseQuery{
 	 */
 	
 	public void printOutput() throws SQLException{
-		System.out.println(getActual());
+		ArrayList<String> answer = getActual();
+		System.out.println(answer);
 	}
 
 }

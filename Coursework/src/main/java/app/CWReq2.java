@@ -273,7 +273,8 @@ public class CWReq2 extends BaseQuery{
 	 */
 	
 	public void printOutput() throws SQLException{
-		System.out.println(getActual());
+		String answer=getActual();
+		System.out.println(answer);
 	}
 
 }

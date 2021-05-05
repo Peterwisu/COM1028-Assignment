@@ -34,8 +34,9 @@ public class CWReq1 extends BaseQuery{
 		//Call function getcustomer() and store in allcustomer
 		customerlist =getcustomer();
 		
+		int sizeOfcustomer =customerlist.size();
 		//Return a size of a ArrayList using size() function which indicating a total number of customer
-		return customerlist.size();
+		return sizeOfcustomer;
 	}
 
 	/**
@@ -97,7 +98,8 @@ public class CWReq1 extends BaseQuery{
 	 */
 	
 	public void printOutput() throws SQLException{
-		System.out.println(getActual());
+		int answer = getActual();
+		System.out.println(answer);
 	}
 
 }
